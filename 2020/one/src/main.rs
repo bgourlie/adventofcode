@@ -11,7 +11,7 @@ fn main() -> Result<()> {
 }
 
 fn load_and_sort_values() -> Result<Vec<i32>> {
-    let mut values = read_lines("input.txt")?
+    let mut values = read_lines("one/input.txt")?
         .map(|line| line.parse::<i32>())
         .collect::<std::result::Result<Vec<_>, _>>()?;
     values.sort();
