@@ -26,12 +26,8 @@ impl Board {
             .step_by(y_step)
             .into_iter()
             .map(|height| ((height / y_step) * x_step, height))
-            .map(|(x, y)| match self.square_at(x, y) {
-                '#' => 1,
-                '.' => 0,
-                _ => unimplemented!(),
-            })
-            .sum::<usize>()
+            .filter(|(x, y)| self.square_at(*x, *y) == '#')
+            .count()
     }
 }
 
