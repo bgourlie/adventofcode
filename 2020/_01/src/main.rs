@@ -14,7 +14,7 @@ fn load_and_sort_values() -> Result<Vec<i32>> {
     let mut values = read_lines("_01/input.txt")?
         .map(|line| line.parse::<i32>())
         .collect::<std::result::Result<Vec<_>, _>>()?;
-    values.sort();
+    values.sort_unstable();
     Ok(values)
 }
 
@@ -68,5 +68,5 @@ fn solution_2() -> Result<i32> {
             }
         }
     }
-    Err("No Solution")?
+    Err("No Solution".into())
 }

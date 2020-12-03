@@ -5,7 +5,7 @@ use std::path::Path;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
-pub fn read_lines<'a, P>(filename: P) -> io::Result<impl Iterator<Item = String>>
+pub fn read_lines<P>(filename: P) -> io::Result<impl Iterator<Item = String>>
 where
     P: AsRef<Path>,
 {
