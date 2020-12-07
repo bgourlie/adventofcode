@@ -13,15 +13,15 @@ fn main() -> Result<()> {
     let mut buf = String::new();
     let mut file = std::fs::File::open("_07/input.txt")?;
     file.read_to_string(&mut buf)?;
-    let items = parse(&buf)?;
-    let can_contain = items
+    let bags = parse(&buf)?;
+    let num_contains = bags
         .keys()
-        .filter(|bag| find_num_required_bags(bag, &items, "shiny gold"))
+        .filter(|bag| contains_nested(bag, &bags, "shiny gold"))
         .count();
-    println!("solution 1: {}", can_contain);
+    println!("solution 1: {}", num_contains);
     println!(
         "solution 2: {}",
-        find_total_bags_containing("shiny gold", &items)
+        find_total_bags_containing("shiny gold", &bags)
     );
     Ok(())
 }
@@ -39,7 +39,7 @@ fn find_total_bags_containing(color: &str, bags: &HashMap<&str, HashMap<&str, u8
     }
 }
 
-fn find_num_required_bags(
+fn contains_nested(
     color: &str,
     bags: &HashMap<&str, HashMap<&str, u8>>,
     looking_for: &str,
@@ -51,7 +51,7 @@ fn find_num_required_bags(
             true
         } else {
             for bag in can_contain.keys() {
-                if find_num_required_bags(bag, bags, looking_for) {
+                if contains_nested(bag, bags, looking_for) {
                     return true;
                 }
             }
