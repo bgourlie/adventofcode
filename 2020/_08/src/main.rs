@@ -109,7 +109,6 @@ fn parse(input: &str) -> std::result::Result<Vec<Instr>, &'static str> {
             map(
                 pair(
                     terminated(alt((tag("nop"), tag("acc"), tag("jmp"))), tag(" ")),
-                    // map(
                     map(
                         pair(
                             map(alt((tag("+"), tag("-"))), |sign| match sign {
