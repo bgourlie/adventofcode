@@ -109,17 +109,7 @@ fn parse(input: &str) -> std::result::Result<Vec<Instr>, &'static str> {
             map(
                 pair(
                     terminated(alt((tag("nop"), tag("acc"), tag("jmp"))), tag(" ")),
-                    map(
-                        pair(
-                            map(alt((tag("+"), tag("-"))), |sign| match sign {
-                                "+" => 1,
-                                "-" => -1,
-                                _ => unimplemented!(),
-                            }),
-                            map(take_until("\n"), |val: &str| val.parse::<i32>().unwrap()),
-                        ),
-                        |(sign, val)| sign * val,
-                    ),
+                    map(take_until("\n"), |val: &str| val.parse::<i32>().unwrap()),
                 ),
                 |(instr, val)| match instr {
                     "nop" => Instr::Nop(val),
