@@ -26,11 +26,10 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn find_total_bags_containing(color: &str, bags: &HashMap<&str, HashMap<&str, u8>>) -> u32 {
+fn find_total_bags_containing(color: &str, bags: &HashMap<&str, HashMap<&str, u32>>) -> u32 {
     if let Some(can_contain) = bags.get(color) {
         let mut num_bags = 0;
         for (inner_bag, inner_amount) in can_contain.iter() {
-            let inner_amount = u32::from(*inner_amount);
             num_bags += inner_amount + (inner_amount * find_total_bags_containing(inner_bag, bags));
         }
         num_bags
@@ -41,7 +40,7 @@ fn find_total_bags_containing(color: &str, bags: &HashMap<&str, HashMap<&str, u8
 
 fn contains_nested(
     color: &str,
-    bags: &HashMap<&str, HashMap<&str, u8>>,
+    bags: &HashMap<&str, HashMap<&str, u32>>,
     looking_for: &str,
 ) -> bool {
     if let Some(can_contain) = bags.get(color) {
@@ -62,23 +61,23 @@ fn contains_nested(
     }
 }
 
-fn parse(input: &str) -> std::result::Result<HashMap<&str, HashMap<&str, u8>>, &'static str> {
+fn parse(input: &str) -> std::result::Result<HashMap<&str, HashMap<&str, u32>>, &'static str> {
     fn parse_color(input: &str) -> IResult<&str, &str> {
         terminated(take_until(" bag"), alt((tag(" bags"), tag(" bag"))))(input)
     }
 
-    fn parse_bag_and_amount(input: &str) -> IResult<&str, (u8, &str)> {
+    fn parse_bag_and_amount(input: &str) -> IResult<&str, (u32, &str)> {
         separated_pair(
             map(take_while(|chr: char| chr.is_ascii_digit()), |num: &str| {
-                num.parse::<u8>().unwrap()
+                num.parse::<u32>().unwrap()
             }),
             tag(" "),
             parse_color,
         )(input)
     }
 
-    fn parse_contained_bags(input: &str) -> IResult<&str, HashMap<&str, u8>> {
-        let (input, contains) = alt((
+    fn parse_contained_bags(input: &str) -> IResult<&str, HashMap<&str, u32>> {
+        alt((
             map(terminated(tag("no other bags."), newline), |_| {
                 HashMap::default()
             }),
@@ -93,12 +92,10 @@ fn parse(input: &str) -> std::result::Result<HashMap<&str, HashMap<&str, u8>>, &
                         .collect::<HashMap<_, _>>()
                 },
             ),
-        ))(input)?;
-
-        Ok((input, contains))
+        ))(input)
     }
 
-    fn parse_line(input: &str) -> IResult<&str, (&str, HashMap<&str, u8>)> {
+    fn parse_line(input: &str) -> IResult<&str, (&str, HashMap<&str, u32>)> {
         pair(
             terminated(parse_color, tag(" contain ")),
             parse_contained_bags,
