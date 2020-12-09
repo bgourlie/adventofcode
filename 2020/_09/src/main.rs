@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 use util::{read_lines, Result};
+use std::time::Instant;
 
 fn main() -> Result<()> {
     let numbers = read_lines("_09/input.txt")?
@@ -7,8 +8,11 @@ fn main() -> Result<()> {
         .collect::<Vec<_>>();
 
     let answer1 = solve_first(&numbers);
+    let start = Instant::now();
+    let duration = Instant::now() - start;
     println!("answer 1: {}", answer1);
     println!("answer 2: {}", solve_second(&numbers, answer1));
+    println!("duration: {}ns", duration.as_nanos());
     Ok(())
 }
 
