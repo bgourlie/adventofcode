@@ -8,4 +8,3 @@ edition = "2018"
 
 [dependencies]
 util = { path = "../util" }
-nom = "6.0.1"
