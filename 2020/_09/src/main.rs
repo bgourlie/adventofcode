@@ -1,17 +1,18 @@
 use std::cmp::Ordering;
-use util::{read_lines, Result};
 use std::time::Instant;
+use util::{read_lines, Result};
 
 fn main() -> Result<()> {
     let numbers = read_lines("_09/input.txt")?
         .map(|num| num.parse::<i64>().unwrap())
         .collect::<Vec<_>>();
 
-    let answer1 = solve_first(&numbers);
     let start = Instant::now();
+    let answer1 = solve_first(&numbers);
+    let answer2 = solve_second(&numbers, answer1);
     let duration = Instant::now() - start;
     println!("answer 1: {}", answer1);
-    println!("answer 2: {}", solve_second(&numbers, answer1));
+    println!("answer 2: {}", answer2);
     println!("duration: {}ns", duration.as_nanos());
     Ok(())
 }
