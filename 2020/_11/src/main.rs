@@ -76,46 +76,28 @@ impl Board {
     }
 
     fn num_adjacent_occupied(&self, x: usize, y: usize) -> usize {
-        let n = y > 0 && self.is_occupied(x, y - 1);
-        let ne = y > 0 && x < self.width - 1 && self.is_occupied(x + 1, y - 1);
-        let e = x < self.width - 1 && self.is_occupied(x + 1, y);
-        let se = x < self.width - 1 && y < self.height - 1 && self.is_occupied(x + 1, y + 1);
-        let s = y < self.height - 1 && self.is_occupied(x, y + 1);
-        let sw = y < self.height - 1 && x > 0 && self.is_occupied(x - 1, y + 1);
-        let w = x > 0 && self.is_occupied(x - 1, y);
-        let nw = x > 0 && y > 0 && self.is_occupied(x - 1, y - 1);
-        n as usize
-            + ne as usize
-            + e as usize
-            + se as usize
-            + s as usize
-            + sw as usize
-            + w as usize
-            + nw as usize
+        (y > 0 && self.is_occupied(x, y - 1)) as usize
+            + (y > 0 && x < self.width - 1 && self.is_occupied(x + 1, y - 1)) as usize
+            + (x < self.width - 1 && self.is_occupied(x + 1, y)) as usize
+            + (x < self.width - 1 && y < self.height - 1 && self.is_occupied(x + 1, y + 1)) as usize
+            + (y < self.height - 1 && self.is_occupied(x, y + 1)) as usize
+            + (y < self.height - 1 && x > 0 && self.is_occupied(x - 1, y + 1)) as usize
+            + (x > 0 && self.is_occupied(x - 1, y)) as usize
+            + (x > 0 && y > 0 && self.is_occupied(x - 1, y - 1)) as usize
     }
 
     fn num_visible_occupied(&self, x: usize, y: usize) -> usize {
-        let n = self.occupied_visible_n(x, y);
-        let ne = self.occupied_visible_ne(x, y);
-        let e = self.occupied_visible_e(x, y);
-        let se = self.occupied_visible_se(x, y);
-        let s = self.occupied_visible_s(x, y);
-        let sw = self.occupied_visible_sw(x, y);
-        let w = self.occupied_visible_w(x, y);
-        let nw = self.occupied_visible_nw(x, y);
-        n as usize
-            + ne as usize
-            + e as usize
-            + se as usize
-            + s as usize
-            + sw as usize
-            + w as usize
-            + nw as usize
+        self.occupied_visible_n(x, y) as usize
+            + self.occupied_visible_ne(x, y) as usize
+            + self.occupied_visible_e(x, y) as usize
+            + self.occupied_visible_se(x, y) as usize
+            + self.occupied_visible_s(x, y) as usize
+            + self.occupied_visible_sw(x, y) as usize
+            + self.occupied_visible_w(x, y) as usize
+            + self.occupied_visible_nw(x, y) as usize
     }
 
-    fn occupied_visible_nw(&self, x: usize, y: usize) -> bool {
-        let mut y = y;
-        let mut x = x;
+    fn occupied_visible_nw(&self, mut x: usize, mut y: usize) -> bool {
         loop {
             if x > 0 && y > 0 {
                 x -= 1;
@@ -131,8 +113,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_w(&self, x: usize, y: usize) -> bool {
-        let mut x = x;
+    fn occupied_visible_w(&self, mut x: usize, y: usize) -> bool {
         loop {
             if x > 0 {
                 x -= 1;
@@ -147,9 +128,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_sw(&self, x: usize, y: usize) -> bool {
-        let mut y = y;
-        let mut x = x;
+    fn occupied_visible_sw(&self, mut x: usize, mut y: usize) -> bool {
         loop {
             if x > 0 && y < self.height - 1 {
                 x -= 1;
@@ -165,8 +144,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_s(&self, x: usize, y: usize) -> bool {
-        let mut y = y;
+    fn occupied_visible_s(&self, x: usize, mut y: usize) -> bool {
         loop {
             if y < self.height - 1 {
                 y += 1;
@@ -181,9 +159,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_se(&self, x: usize, y: usize) -> bool {
-        let mut y = y;
-        let mut x = x;
+    fn occupied_visible_se(&self, mut x: usize, mut y: usize) -> bool {
         loop {
             if x < self.width - 1 && y < self.height - 1 {
                 x += 1;
@@ -199,8 +175,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_n(&self, x: usize, y: usize) -> bool {
-        let mut y = y;
+    fn occupied_visible_n(&self, x: usize, mut y: usize) -> bool {
         loop {
             if y > 0 {
                 y -= 1;
@@ -215,9 +190,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_ne(&self, x: usize, y: usize) -> bool {
-        let mut y = y;
-        let mut x = x;
+    fn occupied_visible_ne(&self, mut x: usize, mut y: usize) -> bool {
         loop {
             if y > 0 && x < self.width - 1 {
                 y -= 1;
@@ -233,8 +206,7 @@ impl Board {
         }
     }
 
-    fn occupied_visible_e(&self, x: usize, y: usize) -> bool {
-        let mut x = x;
+    fn occupied_visible_e(&self, mut x: usize, y: usize) -> bool {
         loop {
             if x < self.width - 1 {
                 x += 1;
@@ -263,7 +235,7 @@ fn main() -> Result<()> {
         .map(|line| line.chars().collect::<Vec<_>>())
         .collect::<Vec<Vec<_>>>();
 
-    let mut board = Board::new(input);
+    let mut board = Board::new(input.clone());
     let mut to_remove = HashSet::<(usize, usize)>::default();
     let mut to_add = HashSet::<(usize, usize)>::default();
 
@@ -297,13 +269,7 @@ fn main() -> Result<()> {
 
     println!("solution 1: {}", board.num_occupied());
 
-    let input = read_lines("_11/input.txt")?
-        .map(|line| line.chars().collect::<Vec<_>>())
-        .collect::<Vec<Vec<_>>>();
-
     let mut board = Board::new(input);
-    let mut to_remove = HashSet::<(usize, usize)>::default();
-    let mut to_add = HashSet::<(usize, usize)>::default();
 
     loop {
         for y in 0..board.height {
