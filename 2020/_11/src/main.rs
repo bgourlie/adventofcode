@@ -20,38 +20,16 @@ impl Board {
     }
 
     fn index_for(&self, x: usize, y: usize) -> usize {
-        if x >= self.width {
-            panic!("x too high");
-        }
-
-        if y >= self.height {
-            panic!("y too high");
-        }
-
         (x % self.width) + (y * self.width)
     }
 
     fn remove_person(&mut self, x: usize, y: usize) {
         let index = self.index_for(x, y);
-        let tile = self.tiles[index];
-        if tile != '#' {
-            panic!(
-                "can only remove person from occupied seat. tile at ({},{}) is {}",
-                x, y, tile
-            );
-        }
         self.tiles[index] = 'L';
     }
 
     fn place_person(&mut self, x: usize, y: usize) {
         let index = self.index_for(x, y);
-        let tile = self.tiles[index];
-        if tile != 'L' {
-            panic!(
-                "can only place person in empty seat. tile at ({},{}) is {}",
-                x, y, tile
-            );
-        }
         self.tiles[index] = '#';
     }
 
